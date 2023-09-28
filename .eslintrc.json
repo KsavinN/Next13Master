@@ -70,11 +70,18 @@
 		"@typescript-eslint/restrict-template-expressions": [
 			"error",
 			{ "allowNumber": true, "allowBoolean": true }
+		],
+		"no-restricted-imports": [
+			"error",
+			{
+				"name": "next/router",
+				"message": "Please use next/navigation instead"
+			}
 		]
 	},
 	"overrides": [
 		{
-			"files": ["src/app/**/*.ts?(x)","tailwind.config.ts"],
+			"files": ["src/app/**/*.ts?(x)", "tailwind.config.ts"],
 			"rules": {
 				"import/no-default-export": "off"
 			}
