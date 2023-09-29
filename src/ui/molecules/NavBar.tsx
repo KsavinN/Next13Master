@@ -21,7 +21,7 @@ export const NavBar = () => {
 					activeClassName={activeClassName}
 					href="/products"
 				>
-					Products
+					All
 				</ActiveLink>
 			</li>
 		</ul>
