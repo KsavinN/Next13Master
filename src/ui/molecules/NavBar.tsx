@@ -5,7 +5,7 @@ export const NavBar = () => {
 	const activeClassName =
 		"text-gray-150 underline underline-offset-2";
 	return (
-		<ul>
+		<ul className="flex gap-8 p-5">
 			<li>
 				<ActiveLink
 					className={className}

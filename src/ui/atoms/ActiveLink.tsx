@@ -3,10 +3,10 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import type { Route } from "next";
-import React from "react";
+import type { ReactNode } from "react";
 
 type ActiveLinkProps = {
-	children: React.ReactNode;
+	children: ReactNode;
 	href: Route;
 	className: string;
 	activeClassName: string;

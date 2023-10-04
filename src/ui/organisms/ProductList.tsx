@@ -3,7 +3,7 @@ import { ProductListItem } from "@/ui/molecules/ProductListItem";
 
 type ProductListProps = { products: ProductItemType[] };
 
-export const ProductList = ({ products }: ProductListProps) => {
+export const ProductsList = ({ products }: ProductListProps) => {
 	return (
 		<ul
 			data-testid="products-list"
