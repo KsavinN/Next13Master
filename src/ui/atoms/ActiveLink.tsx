@@ -1,13 +1,12 @@
 "use client";
-
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import type { Route } from "next";
 import type { ReactNode } from "react";
+import type { Route } from "next";
 
-type ActiveLinkProps = {
+type ActiveLinkProps<T extends string> = {
 	children: ReactNode;
-	href: Route;
+	href: Route<T>;
 	className: string;
 	activeClassName: string;
 	exact?: boolean;
@@ -16,25 +15,25 @@ type ActiveLinkProps = {
 const sliceRoute = (route: string) =>
 	route.split("/").slice(0, 2).join("/");
 
-const useIsSameRoute = (route: Route, exact: boolean) => {
+const useIsSameRoute = (route: string, exact: boolean) => {
 	const pathname = usePathname();
 	return exact
 		? pathname === route
 		: sliceRoute(pathname) === sliceRoute(route);
 };
 
-export const ActiveLink = ({
+export const ActiveLink = <T extends string>({
 	children,
 	href,
 	className,
 	activeClassName,
 	exact = false,
-}: ActiveLinkProps) => {
+}: ActiveLinkProps<T>) => {
 	const isActive = useIsSameRoute(href, exact);
 	return (
 		<Link
 			className={isActive ? activeClassName : className}
-			aria-current={isActive}
+			{...(isActive ? { "aria-current": "page" } : {})}
 			href={href}
 		>
 			{children}

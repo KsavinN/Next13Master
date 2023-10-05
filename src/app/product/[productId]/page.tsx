@@ -1,5 +1,8 @@
 import type { Metadata, ResolvingMetadata } from "next";
-import { getProduct } from "@/api/products";
+import {
+	getProduct,
+	mapProductApiTypeToProductItem,
+} from "@/api/products";
 
 type Props = {
 	params: {
@@ -21,7 +24,7 @@ export async function generateMetadata(
 	const previousImages = (await parent).openGraph?.images || [];
 
 	return {
-		title: product.name,
+		title: product.title,
 		description: product.longDescription,
 		openGraph: {
 			images: ["/some-specific-page-image.jpg", ...previousImages],
@@ -29,24 +32,26 @@ export async function generateMetadata(
 	};
 }
 
-export default async function ProdcutPage({
+export default async function ProductPage({
 	params: { productId },
 }: {
 	params: { productId: string };
 }) {
-	const data = await getProduct(productId);
+	const data = await getProduct(productId).then(
+		mapProductApiTypeToProductItem,
+	);
 	return (
-		<section className="ml-auto mr-auto flex min-h-screen w-3/4 justify-center p-24">
-			<article className="mr-5 basis-3/5">
+		<section className="ml-auto mr-auto flex min-h-screen flex-col justify-center p-24 md:flex-row  lg:w-3/4">
+			<article className="md:basis:4/5 mr-5 lg:basis-3/5 ">
 				<img
-					className="ml-auto mr-auto object-cover object-center"
-					width={700}
+					className="mb-5 ml-auto mr-auto object-cover object-center"
+					width={500}
 					height={400}
 					src={data.coverImg.src}
 					alt={data.coverImg.alt}
 				/>
 			</article>
-			<article className="basis-2/5">
+			<article className="md:basis-1/5 lg:basis-2/5">
 				<h1>{data.name}</h1>
 				<p>{data.category}</p>
 				<p>{data.price}</p>

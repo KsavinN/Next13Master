@@ -3,7 +3,9 @@ import type { ProductApiType, ProductItemType } from "@/types";
 const BASE_URL_PRODUCT =
 	"https://naszsklep-api.vercel.app/api/products";
 
-const mapProductApiTypeToProductItem = (
+export const OFFSET_PRODUCTS_DEFAULT = 50;
+
+export const mapProductApiTypeToProductItem = (
 	product: ProductApiType,
 ): ProductItemType => {
 	return {
@@ -19,23 +21,36 @@ const mapProductApiTypeToProductItem = (
 	};
 };
 
+type getProductsParams = { page?: number; take?: number };
+
 export const getProducts = async (
-	take?: number,
+	params?: getProductsParams,
 ): Promise<ProductItemType[]> => {
-	const data = await fetch(
-		`${BASE_URL_PRODUCT}${take ? `?/take/${take}` : ""}`,
-	);
+	const createUrl = (params?: getProductsParams): string => {
+		const take = params?.take ? params.take : OFFSET_PRODUCTS_DEFAULT;
+		if (params?.page) {
+			return params?.page
+				? `?take=${take}&offset=${(params.page - 1) * take}`
+				: "";
+		} else {
+			return take ? `?take=${take}` : "";
+		}
+	};
+	const data = await fetch(`${BASE_URL_PRODUCT}${createUrl(params)}`);
 	const productsData = (await data.json()) as ProductApiType[];
 	return productsData.map(mapProductApiTypeToProductItem);
 };
 
+export const getAllProductsListLength = async () => {
+	const ProductsList = await getProducts({ take: -1 });
+	return ProductsList.length;
+};
+
 export const getProduct = async (
 	id: string,
-): Promise<ProductItemType> => {
+): Promise<ProductApiType> => {
 	const data = await fetch(`${BASE_URL_PRODUCT}/${id}`);
-	const productData = await data
-		.json()
-		.then(mapProductApiTypeToProductItem);
+	const productData = (await data.json()) as ProductApiType;
 
 	return productData;
 };

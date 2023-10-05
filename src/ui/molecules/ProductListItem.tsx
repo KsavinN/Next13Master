@@ -13,7 +13,7 @@ export const ProductListItem = ({
 	return (
 		<li className="h-full list-none p-4">
 			<article className="hover:scale-110">
-				<Link href={`/products/${id}`} prefetch={true}>
+				<Link href={`/product/${id}`}>
 					<ProductCoverImage {...coverImg} />
 					<ProductListItemDescription
 						product={{ name, category, price }}
