@@ -1,4 +1,4 @@
-import type { Metadata, ResolvingMetadata } from "next";
+import type { Metadata } from "next";
 import {
 	getProduct,
 	mapProductApiTypeToProductItem,
@@ -10,24 +10,22 @@ type Props = {
 	};
 };
 
-export async function generateMetadata(
-	{ params }: Props,
-	parent: ResolvingMetadata,
-): Promise<Metadata> {
+export async function generateMetadata({
+	params,
+}: Props): Promise<Metadata> {
 	// read route params
 	const id = params.productId;
 
 	// fetch data
 	const product = await getProduct(id);
 
-	// optionally access and extend (rather than replace) parent metadata
-	const previousImages = (await parent).openGraph?.images || [];
-
 	return {
 		title: product.title,
 		description: product.longDescription,
 		openGraph: {
-			images: ["/some-specific-page-image.jpg", ...previousImages],
+			title: product.title,
+			description: product.longDescription,
+			images: [{ url: product.image }],
 		},
 	};
 }
@@ -41,7 +39,10 @@ export default async function ProductPage({
 		mapProductApiTypeToProductItem,
 	);
 	return (
-		<section className="ml-auto mr-auto flex min-h-screen flex-col justify-center p-24 md:flex-row  lg:w-3/4">
+		<section
+			data-testid="single-product"
+			className="ml-auto mr-auto flex min-h-screen flex-col justify-center p-24 md:flex-row  lg:w-3/4"
+		>
 			<article className="md:basis:4/5 mr-5 lg:basis-3/5 ">
 				<img
 					className="mb-5 ml-auto mr-auto object-cover object-center"
