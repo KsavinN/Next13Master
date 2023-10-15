@@ -59,7 +59,7 @@ export const SearchInput = () => {
 			<button type="submit">
 				<Search
 					name="search"
-					className="h-5 w-5 text-neutral-800"
+					className="h-5 w-5 text-white"
 					aria-label="search-icon"
 				/>
 			</button>

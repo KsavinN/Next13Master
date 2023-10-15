@@ -19,7 +19,7 @@ export const NavBar = async () => {
 	const categories = await getCategoryListGraphql();
 	return (
 		<nav role="navigation">
-			<ul className="flex gap-8 p-5">
+			<ul className="flex items-center gap-8 p-5">
 				{navbarList.map((item) => (
 					<li key={item.title}>
 						<ActiveLink
@@ -44,7 +44,7 @@ export const NavBar = async () => {
 						</ActiveLink>
 					</li>
 				))}
-				<li className="">
+				<li className="ml-auto">
 					<SearchInput />
 				</li>
 			</ul>
