@@ -10746,16 +10746,16 @@ export type ProductByCategorySlugQueryVariables = Exact<{
 }>;
 
 
-export type ProductByCategorySlugQuery = { productsConnection: { products: Array<{ node: { id: string, name: string, price: number, description: string, categories: Array<{ name: string }>, images: Array<{ url: string, fileName: string }> } }>, pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean } } };
+export type ProductByCategorySlugQuery = { productsConnection: { products: Array<{ node: { id: string, name: string, price: number, description: string, categories: Array<{ name: string, slug: string }>, images: Array<{ url: string, fileName: string }> } }>, pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean } } };
 
 export type ProductGetByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type ProductGetByIdQuery = { product?: { id: string, name: string, price: number, description: string, categories: Array<{ name: string }>, images: Array<{ url: string, fileName: string }> } | null };
+export type ProductGetByIdQuery = { product?: { id: string, name: string, price: number, description: string, categories: Array<{ name: string, slug: string }>, images: Array<{ url: string, fileName: string }> } | null };
 
-export type ProductItemFragment = { id: string, name: string, price: number, description: string, categories: Array<{ name: string }>, images: Array<{ url: string, fileName: string }> };
+export type ProductItemFragment = { id: string, name: string, price: number, description: string, categories: Array<{ name: string, slug: string }>, images: Array<{ url: string, fileName: string }> };
 
 export type ProductsCountsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -10775,14 +10775,14 @@ export type ProductGetListQueryVariables = Exact<{
 }>;
 
 
-export type ProductGetListQuery = { productsConnection: { products: Array<{ node: { id: string, name: string, price: number, description: string, categories: Array<{ name: string }>, images: Array<{ url: string, fileName: string }> } }> } };
+export type ProductGetListQuery = { productsConnection: { products: Array<{ node: { id: string, name: string, price: number, description: string, categories: Array<{ name: string, slug: string }>, images: Array<{ url: string, fileName: string }> } }> } };
 
 export type ProductsGetListByCollectionSlagQueryVariables = Exact<{
   slug: Scalars['String']['input'];
 }>;
 
 
-export type ProductsGetListByCollectionSlagQuery = { products: Array<{ id: string, name: string, price: number, description: string, categories: Array<{ name: string }>, images: Array<{ url: string, fileName: string }> }> };
+export type ProductsGetListByCollectionSlagQuery = { products: Array<{ id: string, name: string, price: number, description: string, categories: Array<{ name: string, slug: string }>, images: Array<{ url: string, fileName: string }> }> };
 
 export class TypedDocumentString<TResult, TVariables>
   extends String
@@ -10806,6 +10806,7 @@ export const ProductItemFragmentDoc = new TypedDocumentString(`
   description
   categories(first: 1) {
     name
+    slug
   }
   images(first: 1) {
     url
@@ -10877,6 +10878,7 @@ export const ProductByCategorySlugDocument = new TypedDocumentString(`
   description
   categories(first: 1) {
     name
+    slug
   }
   images(first: 1) {
     url
@@ -10896,6 +10898,7 @@ export const ProductGetByIdDocument = new TypedDocumentString(`
   description
   categories(first: 1) {
     name
+    slug
   }
   images(first: 1) {
     url
@@ -10937,6 +10940,7 @@ export const ProductGetListDocument = new TypedDocumentString(`
   description
   categories(first: 1) {
     name
+    slug
   }
   images(first: 1) {
     url
@@ -10956,6 +10960,7 @@ export const ProductsGetListByCollectionSlagDocument = new TypedDocumentString(`
   description
   categories(first: 1) {
     name
+    slug
   }
   images(first: 1) {
     url

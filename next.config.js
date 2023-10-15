@@ -27,8 +27,7 @@ const nextConfig = {
 			},
 			{
 				protocol: "https",
-				hostname: "dsc.cloud",
-				port: "",
+				hostname: "media.graphassets.com",
 			},
 		],
 	},
