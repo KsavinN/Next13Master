@@ -1,6 +1,7 @@
 import type { Route } from "next";
 import { ActiveLink } from "@/ui/atoms/ActiveLink";
 import { getCategoryListGraphql } from "@/api/categories";
+import { SearchInput } from "@/ui/atoms/SearchProduct";
 
 const className = "text-gray-50 hover:underline underline-offset-2";
 const activeClassName = "text-gray-150 underline underline-offset-2";
@@ -43,6 +44,9 @@ export const NavBar = async () => {
 						</ActiveLink>
 					</li>
 				))}
+				<li className="">
+					<SearchInput />
+				</li>
 			</ul>
 		</nav>
 	);

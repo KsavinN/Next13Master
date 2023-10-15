@@ -6,6 +6,7 @@ import {
 	ProductsCountsDocument,
 	ProductsCountsByCategorySlugDocument,
 	ProductGetVariantsListDocument,
+	ProductsGetListSearchDocument,
 } from "@/gql/graphql";
 
 export const OFFSET_PRODUCTS_DEFAULT = 6;
@@ -86,4 +87,17 @@ export const getProductGetVariantsList = async (
 		throw TypeError(`Product Variants not found`);
 
 	return queryResponse.product.variants;
+};
+
+export const getSearchProductsList = async (query: string) => {
+	const queryResponse = await executeGraphql(
+		ProductsGetListSearchDocument,
+		{ search: query },
+	);
+
+	if (!queryResponse) {
+		throw TypeError(`Product list not found`);
+	}
+
+	return queryResponse.products;
 };

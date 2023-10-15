@@ -10746,7 +10746,7 @@ export type ProductByCategorySlugQueryVariables = Exact<{
 }>;
 
 
-export type ProductByCategorySlugQuery = { productsConnection: { products: Array<{ node: { id: string, name: string, price: number, description: string, categories: Array<{ name: string, slug: string }>, images: Array<{ url: string, fileName: string }> } }>, pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean } } };
+export type ProductByCategorySlugQuery = { productsConnection: { products: Array<{ node: { id: string, name: string, price: number, description: string, categories: Array<{ name: string, slug: string }>, images: Array<{ url: string, fileName: string }> } }> } };
 
 export type ProductGetByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -10783,6 +10783,13 @@ export type ProductGetListQueryVariables = Exact<{
 
 
 export type ProductGetListQuery = { productsConnection: { products: Array<{ node: { id: string, name: string, price: number, description: string, categories: Array<{ name: string, slug: string }>, images: Array<{ url: string, fileName: string }> } }> } };
+
+export type ProductsGetListSearchQueryVariables = Exact<{
+  search: Scalars['String']['input'];
+}>;
+
+
+export type ProductsGetListSearchQuery = { products: Array<{ id: string, name: string, price: number, description: string, categories: Array<{ name: string, slug: string }>, images: Array<{ url: string, fileName: string }> }> };
 
 export type ProductsGetListByCollectionSlagQueryVariables = Exact<{
   slug: Scalars['String']['input'];
@@ -10871,10 +10878,6 @@ export const ProductByCategorySlugDocument = new TypedDocumentString(`
       node {
         ...ProductItem
       }
-    }
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
     }
   }
 }
@@ -10974,6 +10977,26 @@ export const ProductGetListDocument = new TypedDocumentString(`
     fileName
   }
 }`) as unknown as TypedDocumentString<ProductGetListQuery, ProductGetListQueryVariables>;
+export const ProductsGetListSearchDocument = new TypedDocumentString(`
+    query ProductsGetListSearch($search: String!) {
+  products(where: {_search: $search}) {
+    ...ProductItem
+  }
+}
+    fragment ProductItem on Product {
+  id
+  name
+  price
+  description
+  categories(first: 1) {
+    name
+    slug
+  }
+  images(first: 1) {
+    url
+    fileName
+  }
+}`) as unknown as TypedDocumentString<ProductsGetListSearchQuery, ProductsGetListSearchQueryVariables>;
 export const ProductsGetListByCollectionSlagDocument = new TypedDocumentString(`
     query ProductsGetListByCollectionSlag($slug: String!) {
   products(where: {collections_some: {slug: $slug}}) {
