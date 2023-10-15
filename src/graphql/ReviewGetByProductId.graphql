@@ -1,0 +1,7 @@
+query ReviewGetByProductId($id: ID!) {
+	product(where: { id: $id }) {
+		reviews {
+			...ReviewItem
+		}
+	}
+}

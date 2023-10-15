@@ -6,6 +6,7 @@ import { getProductById } from "@/api/products";
 import { SuggestedProductsList } from "@/ui/organisms/SuggestedProducts";
 import { formatPrice } from "@/utils/formatPrice";
 import { ProductItemVariantsList } from "@/ui/molecules/ProductItemVariantsList";
+import { ProductReview } from "@/ui/organisms/ProductReview";
 
 type Props = {
 	params: {
@@ -71,6 +72,9 @@ export default async function ProductPage({
 					<ProductItemVariantsList productId={productId} />
 				</article>
 			</section>
+			<Suspense>
+				<ProductReview productId={productId} />
+			</Suspense>
 			<Suspense>
 				<SuggestedProductsList category={categorySlug} />
 			</Suspense>

@@ -10755,6 +10755,13 @@ export type ProductGetByIdQueryVariables = Exact<{
 
 export type ProductGetByIdQuery = { product?: { id: string, name: string, price: number, description: string, categories: Array<{ name: string, slug: string }>, images: Array<{ url: string, fileName: string }> } | null };
 
+export type ProductGetReviewsRatingQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type ProductGetReviewsRatingQuery = { reviewsConnection: { edges: Array<{ node: { rating: number } }>, aggregate: { count: number } } };
+
 export type ProductGetVariantsListQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -10798,6 +10805,34 @@ export type ProductsGetListByCollectionSlagQueryVariables = Exact<{
 
 export type ProductsGetListByCollectionSlagQuery = { products: Array<{ id: string, name: string, price: number, description: string, categories: Array<{ name: string, slug: string }>, images: Array<{ url: string, fileName: string }> }> };
 
+export type ReviewCreateMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  headline: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  email: Scalars['String']['input'];
+  content: Scalars['String']['input'];
+  rating: Scalars['Int']['input'];
+}>;
+
+
+export type ReviewCreateMutation = { createReview?: { id: string } | null };
+
+export type ReviewGetByProductIdQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type ReviewGetByProductIdQuery = { product?: { reviews: Array<{ id: string, name: string, headline: string, email: string, content: string, rating: number }> } | null };
+
+export type ReviewItemFragment = { id: string, name: string, headline: string, email: string, content: string, rating: number };
+
+export type ReviewPublishMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type ReviewPublishMutation = { publishReview?: { id: string, name: string, headline: string, email: string, content: string, rating: number } | null };
+
 export class TypedDocumentString<TResult, TVariables>
   extends String
   implements DocumentTypeDecoration<TResult, TVariables>
@@ -10828,6 +10863,16 @@ export const ProductItemFragmentDoc = new TypedDocumentString(`
   }
 }
     `, {"fragmentName":"ProductItem"}) as unknown as TypedDocumentString<ProductItemFragment, unknown>;
+export const ReviewItemFragmentDoc = new TypedDocumentString(`
+    fragment ReviewItem on Review {
+  id
+  name
+  headline
+  email
+  content
+  rating
+}
+    `, {"fragmentName":"ReviewItem"}) as unknown as TypedDocumentString<ReviewItemFragment, unknown>;
 export const CategoriesGetListDocument = new TypedDocumentString(`
     query CategoriesGetList {
   categories {
@@ -10915,6 +10960,20 @@ export const ProductGetByIdDocument = new TypedDocumentString(`
     fileName
   }
 }`) as unknown as TypedDocumentString<ProductGetByIdQuery, ProductGetByIdQueryVariables>;
+export const ProductGetReviewsRatingDocument = new TypedDocumentString(`
+    query ProductGetReviewsRating($id: ID!) {
+  reviewsConnection(where: {product: {id: $id}}) {
+    edges {
+      node {
+        rating
+      }
+    }
+    aggregate {
+      count
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<ProductGetReviewsRatingQuery, ProductGetReviewsRatingQueryVariables>;
 export const ProductGetVariantsListDocument = new TypedDocumentString(`
     query ProductGetVariantsList($id: ID!) {
   product(where: {id: $id}) {
@@ -11017,3 +11076,42 @@ export const ProductsGetListByCollectionSlagDocument = new TypedDocumentString(`
     fileName
   }
 }`) as unknown as TypedDocumentString<ProductsGetListByCollectionSlagQuery, ProductsGetListByCollectionSlagQueryVariables>;
+export const ReviewCreateDocument = new TypedDocumentString(`
+    mutation ReviewCreate($id: ID!, $headline: String!, $name: String!, $email: String!, $content: String!, $rating: Int!) {
+  createReview(
+    data: {headline: $headline, name: $name, email: $email, content: $content, rating: $rating, product: {connect: {id: $id}}}
+  ) {
+    id
+  }
+}
+    `) as unknown as TypedDocumentString<ReviewCreateMutation, ReviewCreateMutationVariables>;
+export const ReviewGetByProductIdDocument = new TypedDocumentString(`
+    query ReviewGetByProductId($id: ID!) {
+  product(where: {id: $id}) {
+    reviews {
+      ...ReviewItem
+    }
+  }
+}
+    fragment ReviewItem on Review {
+  id
+  name
+  headline
+  email
+  content
+  rating
+}`) as unknown as TypedDocumentString<ReviewGetByProductIdQuery, ReviewGetByProductIdQueryVariables>;
+export const ReviewPublishDocument = new TypedDocumentString(`
+    mutation ReviewPublish($id: ID!) {
+  publishReview(where: {id: $id}, to: PUBLISHED) {
+    ...ReviewItem
+  }
+}
+    fragment ReviewItem on Review {
+  id
+  name
+  headline
+  email
+  content
+  rating
+}`) as unknown as TypedDocumentString<ReviewPublishMutation, ReviewPublishMutationVariables>;
