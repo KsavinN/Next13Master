@@ -1,4 +1,5 @@
 import NextImage from "next/image";
+import Link from "next/link";
 import { getProductByCategorySlug } from "@/api/categories";
 import { getProductsCountsByCategorySlugGraphql } from "@/api/products";
 import { formatPrice } from "@/utils/formatPrice";
@@ -34,22 +35,23 @@ export const SuggestedProductsList = async ({
 				data-testid="related-products"
 			>
 				{suggestedProducts.map((product) => (
-					<li
-						key={product.id}
-						className="flex h-96 w-64 flex-col items-center justify-center"
-					>
-						<NextImage
-							className="h-64 w-64"
-							height={400}
-							width={400}
-							src={product.images[0]?.url ?? ""}
-							alt={product.name}
-						/>
-						<h3 className="text-2 mb-5 font-bold">{product.name}</h3>
-						<p className="mb-5 text-xl">
-							{formatPrice(product.price)}
-						</p>
-					</li>
+					<Link href={`/product/${product.id}`} key={product.id}>
+						<li className="flex h-96 w-64 flex-col items-center justify-center">
+							<NextImage
+								className="h-64 w-64"
+								height={400}
+								width={400}
+								src={product.images[0]?.url ?? ""}
+								alt={product.name}
+							/>
+							<h3 className="text-2 mb-5 font-bold">
+								{product.name}
+							</h3>
+							<p className="mb-5 text-xl">
+								{formatPrice(product.price)}
+							</p>
+						</li>
+					</Link>
 				))}
 			</ul>
 		</section>

@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { getProductGraphql } from "@/api/products";
 import { SuggestedProductsList } from "@/ui/organisms/SuggestedProducts";
 import { formatPrice } from "@/utils/formatPrice";
+import { ProductItemVariantsList } from "@/ui/molecules/ProductItemVariantsList";
 
 type Props = {
 	params: {
@@ -61,10 +62,13 @@ export default async function ProductPage({
 					/>
 				</article>
 				<article className="md:basis-1/5 lg:basis-2/5">
-					<h1 className="font-bold">{product.name}</h1>
-					<p>{product.categories[0]?.name}</p>
-					<p>{formatPrice(product.price)}</p>
-					<p>{product.description}</p>
+					<section>
+						<h1 className="font-bold">{product.name}</h1>
+						<p>{product.categories[0]?.name}</p>
+						<p>{formatPrice(product.price)}</p>
+						<p>{product.description}</p>
+					</section>
+					<ProductItemVariantsList productId={productId} />
 				</article>
 			</section>
 			<Suspense>

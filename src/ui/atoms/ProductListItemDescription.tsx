@@ -1,4 +1,4 @@
-import { formatPrice } from "@/utils";
+import { formatPrice } from "@/utils/formatPrice";
 
 type ProductListItemDescriptionProps = {
 	product: {

@@ -23,6 +23,7 @@ export default async function ProductPageLayout({
 				className="mb-5"
 				activePage={page}
 				pages={numberOfPages}
+				paginationType="product"
 			/>
 			<section>{children}</section>
 		</section>

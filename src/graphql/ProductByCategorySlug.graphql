@@ -13,9 +13,5 @@ query ProductByCategorySlug(
 				...ProductItem
 			}
 		}
-		pageInfo {
-			hasNextPage
-			hasPreviousPage
-		}
 	}
 }

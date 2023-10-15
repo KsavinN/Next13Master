@@ -10755,6 +10755,13 @@ export type ProductGetByIdQueryVariables = Exact<{
 
 export type ProductGetByIdQuery = { product?: { id: string, name: string, price: number, description: string, categories: Array<{ name: string, slug: string }>, images: Array<{ url: string, fileName: string }> } | null };
 
+export type ProductGetVariantsListQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type ProductGetVariantsListQuery = { product?: { variants: Array<{ id: string, name: string } | { id: string, name: string } | { id: string, name: string }> } | null };
+
 export type ProductItemFragment = { id: string, name: string, price: number, description: string, categories: Array<{ name: string, slug: string }>, images: Array<{ url: string, fileName: string }> };
 
 export type ProductsCountsQueryVariables = Exact<{ [key: string]: never; }>;
@@ -10905,6 +10912,26 @@ export const ProductGetByIdDocument = new TypedDocumentString(`
     fileName
   }
 }`) as unknown as TypedDocumentString<ProductGetByIdQuery, ProductGetByIdQueryVariables>;
+export const ProductGetVariantsListDocument = new TypedDocumentString(`
+    query ProductGetVariantsList($id: ID!) {
+  product(where: {id: $id}) {
+    variants {
+      ... on ProductColorVariant {
+        id
+        name
+      }
+      ... on ProductSizeColorVariant {
+        id
+        name
+      }
+      ... on ProductSizeVariant {
+        id
+        name
+      }
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<ProductGetVariantsListQuery, ProductGetVariantsListQueryVariables>;
 export const ProductsCountsDocument = new TypedDocumentString(`
     query ProductsCounts {
   productsConnection {
