@@ -1,0 +1,16 @@
+mutation CartCreateAndAddProduct($productId: ID!, $total: Int!) {
+	createOrder(
+		data: {
+			total: $total
+			orderItems: {
+				create: {
+					quantity: 1
+					total: $total
+					product: { connect: { id: $productId } }
+				}
+			}
+		}
+	) {
+		...Cart
+	}
+}
