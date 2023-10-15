@@ -10,6 +10,8 @@ export const ProductReview = async ({
 }: ReviewFormOptimisticProps) => {
 	const reviews = await getProductReviewById(productId);
 
+	if (!reviews) return null;
+
 	return (
 		<section className="mb-10 flex flex-col gap-10 px-6 py-6 sm:flex-row sm:px-36">
 			<ProductReviewForm productId={productId} reviews={reviews} />

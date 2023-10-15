@@ -1,7 +1,9 @@
 import type { Route } from "next";
+import { ShoppingBasket } from "lucide-react";
 import { ActiveLink } from "@/ui/atoms/ActiveLink";
 import { getCategoryListGraphql } from "@/api/categories";
 import { SearchInput } from "@/ui/atoms/SearchProduct";
+import { getCartByIdFromCookie } from "@/api/cart";
 
 const className = "text-gray-50 hover:underline underline-offset-2";
 const activeClassName = "text-gray-150 underline underline-offset-2";
@@ -17,6 +19,9 @@ const navbarList: {
 
 export const NavBar = async () => {
 	const categories = await getCategoryListGraphql();
+	const cart = await getCartByIdFromCookie();
+	const quantity = cart?.orderItems.length ?? 0;
+
 	return (
 		<nav role="navigation">
 			<ul className="flex items-center gap-8 p-5">
@@ -46,6 +51,19 @@ export const NavBar = async () => {
 				))}
 				<li className="ml-auto">
 					<SearchInput />
+				</li>
+				<li>
+					<ActiveLink
+						className={className}
+						activeClassName={activeClassName}
+						href="/cart"
+						exact
+					>
+						<div className="flex justify-between gap-5">
+							<ShoppingBasket />
+							<p>Cart {!!quantity && quantity}</p>
+						</div>
+					</ActiveLink>
 				</li>
 			</ul>
 		</nav>

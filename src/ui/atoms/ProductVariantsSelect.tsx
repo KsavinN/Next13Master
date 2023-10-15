@@ -1,5 +1,5 @@
 "use client";
-import { type ChangeEvent, useCallback } from "react";
+import { type ChangeEvent, useCallback, useEffect } from "react";
 import {
 	usePathname,
 	useRouter,
@@ -16,15 +16,24 @@ export const ProductVariantsSelect = ({ variants }: Props) => {
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 
+	const setParams = (variant: string) => {
+		const params = new URLSearchParams(searchParams);
+		params.set("variant", variant);
+		router.push(`${pathname}?${params.toString()}` as Route);
+	};
+
 	const handleSelect = useCallback(
 		(event: ChangeEvent<HTMLSelectElement>) => {
 			const variant = event.target.value;
-			const params = new URLSearchParams(searchParams);
-			params.set("variant", variant);
-			router.push(`${pathname}?${params.toString()}` as Route);
+			setParams(variant);
 		},
 		[pathname, router, searchParams],
 	);
+
+	useEffect(() => {
+		if (variants && variants.length > 0)
+			setParams(variants[0]?.name ?? "");
+	}, []);
 
 	return (
 		<>

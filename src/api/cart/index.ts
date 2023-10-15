@@ -89,3 +89,24 @@ export const addOrUpdateProductToCart = async (
 
 	return cartId.upsertOrderItem?.id;
 };
+
+export const getCartFromCookies = async () => {
+	const cartId = cookies().get("cartId")?.value;
+	if (cartId) {
+		const cart = await executeGraphql(
+			CartGetByIdDocument,
+			{
+				id: cartId,
+			},
+			{
+				cache: "no-store",
+				next: {
+					tags: ["cart"],
+				},
+			},
+		);
+		if (cart.order) {
+			return cart.order;
+		}
+	}
+};

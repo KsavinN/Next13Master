@@ -2,6 +2,7 @@
 import { revalidateTag } from "next/cache";
 import { type ReviewItemFragment } from "@/gql/graphql";
 import { createReview, publishReview } from "@/api/review";
+import { addOrUpdateProductToCart } from "@/api/cart";
 
 export const addReviewAction = async (
 	productId: string,
@@ -27,4 +28,15 @@ export const addReviewAction = async (
 	await publishReview(reviewId.id);
 
 	revalidateTag("review");
+};
+
+export const addProductToCartAction = async (formData: FormData) => {
+	const id = await addOrUpdateProductToCart(
+		String(formData.get("productId")),
+		Number(formData.get("productPrice")),
+	);
+
+	revalidateTag("cart");
+
+	return id;
 };

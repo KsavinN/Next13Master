@@ -10723,6 +10723,13 @@ export type CartCreateAndAddProductMutationVariables = Exact<{
 
 export type CartCreateAndAddProductMutation = { createOrder?: { id: string, orderItems: Array<{ id: string, quantity: number, product?: { id: string, name: string, price: number, description: string, categories: Array<{ name: string, slug: string }>, images: Array<{ url: string, fileName: string }> } | null }> } | null };
 
+export type CartCreateMutationVariables = Exact<{
+  total: Scalars['Int']['input'];
+}>;
+
+
+export type CartCreateMutation = { createOrder?: { id: string, total: number } | null };
+
 export type CartDeleteProductMutationVariables = Exact<{
   itemId: Scalars['ID']['input'];
 }>;
@@ -10973,6 +10980,14 @@ fragment ProductItem on Product {
     fileName
   }
 }`) as unknown as TypedDocumentString<CartCreateAndAddProductMutation, CartCreateAndAddProductMutationVariables>;
+export const CartCreateDocument = new TypedDocumentString(`
+    mutation CartCreate($total: Int!) {
+  createOrder(data: {total: $total}) {
+    id
+    total
+  }
+}
+    `) as unknown as TypedDocumentString<CartCreateMutation, CartCreateMutationVariables>;
 export const CartDeleteProductDocument = new TypedDocumentString(`
     mutation CartDeleteProduct($itemId: ID!) {
   deleteOrderItem(where: {id: $itemId}) {

@@ -1,12 +1,16 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import type { Metadata } from "next";
 import NextImage from "next/image";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { revalidateTag } from "next/cache";
 import { getProductById } from "@/api/products";
 import { SuggestedProductsList } from "@/ui/organisms/SuggestedProducts";
 import { formatPrice } from "@/utils/formatPrice";
 import { ProductItemVariantsList } from "@/ui/molecules/ProductItemVariantsList";
 import { ProductReview } from "@/ui/organisms/ProductReview";
+import { FormSubmitButton } from "@/ui/atoms/FormSubmitButton";
+import { addOrUpdateProductToCart } from "@/api/cart";
 
 type Props = {
 	params: {
@@ -45,6 +49,18 @@ export default async function ProductPage({
 
 	if (!product) throw notFound();
 
+	async function addToCartAction(formData: FormData) {
+		"use server";
+		const id = await addOrUpdateProductToCart(
+			String(formData.get("productId")),
+			Number(formData.get("productPrice")),
+		);
+
+		revalidateTag("cart");
+
+		return id;
+	}
+
 	const categorySlug = product.categories[0]?.slug;
 
 	return (
@@ -70,6 +86,28 @@ export default async function ProductPage({
 						<p>{product.description}</p>
 					</section>
 					<ProductItemVariantsList productId={productId} />
+					<section className="mt-10 flex items-center">
+						<form action={addToCartAction}>
+							<input
+								type="text"
+								name="productId"
+								value={product.id}
+								hidden
+								readOnly
+							/>
+							<input
+								type="number"
+								name="productPrice"
+								value={product.price}
+								hidden
+								readOnly
+							/>
+							<FormSubmitButton
+								data-testid="add-to-cart-button"
+								label={"Add To Cart"}
+							/>
+						</form>
+					</section>
 				</article>
 			</section>
 			<Suspense>
