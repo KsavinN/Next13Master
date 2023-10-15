@@ -1,0 +1,15 @@
+query ProductsCounts {
+	productsConnection {
+		aggregate {
+			count
+		}
+	}
+}
+
+query ProductsCountsByCategorySlug($slug: String!) {
+	productsConnection(where: { categories_some: { slug: $slug } }) {
+		aggregate {
+			count
+		}
+	}
+}

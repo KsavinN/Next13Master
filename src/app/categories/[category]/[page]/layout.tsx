@@ -1,19 +1,21 @@
 import {
 	OFFSET_PRODUCTS_DEFAULT,
-	getProductsCountsGraphql,
+	getProductsCountsByCategorySlugGraphql,
 } from "@/api/products";
 import { ProductsPagination } from "@/ui/organisms/ProductsPagination";
 
-export default async function ProductPageLayout({
+export default async function CategoryProductsPageLayout({
 	children,
-	params: { page },
+	params: { page, category },
 }: {
 	children: React.ReactNode;
 	params: {
 		page: string;
+		category: string;
 	};
 }) {
-	const productsCount = await getProductsCountsGraphql();
+	const productsCount =
+		await getProductsCountsByCategorySlugGraphql(category);
 	const numberOfPages = Math.ceil(
 		productsCount / OFFSET_PRODUCTS_DEFAULT,
 	);
@@ -23,6 +25,8 @@ export default async function ProductPageLayout({
 				className="mb-5"
 				activePage={page}
 				pages={numberOfPages}
+				paginationType="category"
+				categoryName={category}
 			/>
 			<section>{children}</section>
 		</section>

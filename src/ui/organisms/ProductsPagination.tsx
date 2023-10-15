@@ -1,9 +1,14 @@
-import { PaginationItem } from "@/ui/molecules/PaginationItem";
+import {
+	PaginationItem,
+	type PaginationType,
+} from "@/ui/molecules/PaginationItem";
 
 type Props = {
 	pages: number;
 	activePage: string;
 	className?: string;
+	paginationType: PaginationType;
+	categoryName?: string;
 };
 
 const range = (start: number, end: number) => {
@@ -39,21 +44,42 @@ export const ProductsPagination = ({
 	pages,
 	activePage,
 	className,
+	paginationType,
+	categoryName,
 }: Props) => {
 	const { shouldShowLeftDots, shouldShowRightDots, paginationPages } =
 		calculatePagination(pages, Number(activePage), 5);
+	const _categoryName =
+		categoryName === undefined ? "" : categoryName;
 	return (
 		<nav aria-label="pagination">
 			<ul
-				className={`flex flex-wrap justify-between p-3  ${className}`}
+				className={`flex flex-wrap justify-center gap-5 p-3  ${className}`}
 			>
-				<PaginationItem page={1} />
+				<PaginationItem
+					page={1}
+					paginationType={paginationType}
+					categoryName={_categoryName}
+				/>
 				{shouldShowLeftDots && <li>. . .</li>}
 				{paginationPages.map((page) => {
-					return <PaginationItem key={page} page={page} />;
+					return (
+						<PaginationItem
+							paginationType={paginationType}
+							categoryName={_categoryName}
+							key={page}
+							page={page}
+						/>
+					);
 				})}
 				{shouldShowRightDots && <li>. . .</li>}
-				<PaginationItem page={pages} />
+				{pages !== 1 && (
+					<PaginationItem
+						categoryName={_categoryName}
+						paginationType={paginationType}
+						page={pages}
+					/>
+				)}
 			</ul>
 		</nav>
 	);

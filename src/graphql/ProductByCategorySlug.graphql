@@ -1,0 +1,21 @@
+query ProductByCategorySlug(
+	$slug: String!
+	$limit: Int!
+	$offset: Int!
+) {
+	productsConnection(
+		where: { categories_some: { slug: $slug } }
+		first: $limit
+		skip: $offset
+	) {
+		products: edges {
+			node {
+				...ProductItem
+			}
+		}
+		pageInfo {
+			hasNextPage
+			hasPreviousPage
+		}
+	}
+}

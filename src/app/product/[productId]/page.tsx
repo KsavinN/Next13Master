@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import {
-	getProduct,
-	mapProductApiTypeToProductItem,
-} from "@/api/products";
+import { notFound } from "next/navigation";
+import { getProductGraphql } from "@/api/products";
 
 type Props = {
 	params: {
@@ -17,15 +15,17 @@ export async function generateMetadata({
 	const id = params.productId;
 
 	// fetch data
-	const product = await getProduct(id);
+	const product = await getProductGraphql(id);
+
+	if (!product) throw notFound();
 
 	return {
-		title: product.title,
-		description: product.longDescription,
+		title: product.name,
+		description: product.description,
 		openGraph: {
-			title: product.title,
-			description: product.longDescription,
-			images: [{ url: product.image }],
+			title: product.name,
+			description: product.description,
+			images: product.images,
 		},
 	};
 }
@@ -35,9 +35,10 @@ export default async function ProductPage({
 }: {
 	params: { productId: string };
 }) {
-	const data = await getProduct(productId).then(
-		mapProductApiTypeToProductItem,
-	);
+	const product = await getProductGraphql(productId);
+
+	if (!product) throw notFound();
+
 	return (
 		<section
 			data-testid="single-product"
@@ -48,15 +49,15 @@ export default async function ProductPage({
 					className="mb-5 ml-auto mr-auto object-cover object-center"
 					width={500}
 					height={400}
-					src={data.coverImg.src}
-					alt={data.coverImg.alt}
+					src={product.images[0]?.url}
+					alt={product.name}
 				/>
 			</article>
 			<article className="md:basis-1/5 lg:basis-2/5">
-				<h1>{data.name}</h1>
-				<p>{data.category}</p>
-				<p>{data.price}</p>
-				<p>{data.longDescription}</p>
+				<h1>{product.name}</h1>
+				<p>{product.categories[0]?.name}</p>
+				<p>{product.price}</p>
+				<p>{product.description}</p>
 			</article>
 		</section>
 	);

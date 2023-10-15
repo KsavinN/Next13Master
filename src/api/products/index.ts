@@ -1,56 +1,74 @@
-import type { ProductApiType, ProductItemType } from "@/types";
+import { executeGraphql } from "@/api/graphqlApi";
+import {
+	ProductGetByIdDocument,
+	type ProductItemFragment,
+	ProductGetListDocument,
+	ProductsCountsDocument,
+	ProductsCountsByCategorySlugDocument,
+} from "@/gql/graphql";
 
-const BASE_URL_PRODUCT =
-	"https://naszsklep-api.vercel.app/api/products";
+export const OFFSET_PRODUCTS_DEFAULT = 6;
 
-export const OFFSET_PRODUCTS_DEFAULT = 50;
-
-export const mapProductApiTypeToProductItem = (
-	product: ProductApiType,
-): ProductItemType => {
-	return {
-		id: product.id,
-		name: product.title,
-		price: product.price,
-		category: product.category,
-		longDescription: product.longDescription,
-		coverImg: {
-			src: product.image,
-			alt: product.description,
-		},
-	};
+type getProductsListGraphqlParams = {
+	limit?: number;
+	page?: number;
 };
 
-type getProductsParams = { page?: number; take?: number };
+export const getProductsListGraphql = async (
+	params?: getProductsListGraphqlParams,
+) => {
+	const limit = params?.limit
+		? params.limit
+		: OFFSET_PRODUCTS_DEFAULT;
+	const offset = params?.page ? (params.page - 1) * limit : 0;
+	const queryResponse = await executeGraphql(ProductGetListDocument, {
+		limit,
+		offset,
+	});
 
-export const getProducts = async (
-	params?: getProductsParams,
-): Promise<ProductItemType[]> => {
-	const createUrl = (params?: getProductsParams): string => {
-		const take = params?.take ? params.take : OFFSET_PRODUCTS_DEFAULT;
-		if (params?.page) {
-			return params?.page
-				? `?take=${take}&offset=${(params.page - 1) * take}`
-				: "";
-		} else {
-			return take ? `?take=${take}` : "";
-		}
-	};
-	const data = await fetch(`${BASE_URL_PRODUCT}${createUrl(params)}`);
-	const productsData = (await data.json()) as ProductApiType[];
-	return productsData.map(mapProductApiTypeToProductItem);
+	if (!queryResponse) {
+		throw TypeError(`Product list not found`);
+	}
+
+	return queryResponse.productsConnection.products.map(
+		(node) => node.node,
+	);
 };
 
-export const getAllProductsListLength = async () => {
-	const ProductsList = await getProducts({ take: -1 });
-	return ProductsList.length;
+export const getProductsCountsGraphql = async () => {
+	const queryResponse = await executeGraphql(
+		ProductsCountsDocument,
+		{},
+	);
+
+	if (!queryResponse) {
+		throw TypeError(`Product list not found`);
+	}
+	return queryResponse.productsConnection.aggregate.count;
 };
 
-export const getProduct = async (
+export const getProductsCountsByCategorySlugGraphql = async (
+	categorySlug: string,
+) => {
+	const queryResponse = await executeGraphql(
+		ProductsCountsByCategorySlugDocument,
+		{ slug: categorySlug },
+	);
+
+	if (!queryResponse) {
+		throw TypeError(`Product list not found in ${categorySlug}`);
+	}
+	return queryResponse.productsConnection.aggregate.count;
+};
+
+export const getProductGraphql = async (
 	id: string,
-): Promise<ProductApiType> => {
-	const data = await fetch(`${BASE_URL_PRODUCT}/${id}`);
-	const productData = (await data.json()) as ProductApiType;
-
-	return productData;
+): Promise<ProductItemFragment | null | undefined> => {
+	const queryResponse = await executeGraphql(ProductGetByIdDocument, {
+		id,
+	});
+	if (!queryResponse) {
+		throw TypeError(`Product not found`);
+	}
+	return queryResponse.product;
 };
