@@ -63,7 +63,7 @@ export const getProductsCountsByCategorySlugGraphql = async (
 	return queryResponse.productsConnection.aggregate.count;
 };
 
-export const getProductGraphql = async (
+export const getProductById = async (
 	id: string,
 ): Promise<ProductItemFragment | null | undefined> => {
 	const queryResponse = await executeGraphql(ProductGetByIdDocument, {

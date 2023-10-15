@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import NextImage from "next/image";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { getProductGraphql } from "@/api/products";
+import { getProductById } from "@/api/products";
 import { SuggestedProductsList } from "@/ui/organisms/SuggestedProducts";
 import { formatPrice } from "@/utils/formatPrice";
 import { ProductItemVariantsList } from "@/ui/molecules/ProductItemVariantsList";
@@ -20,7 +20,7 @@ export async function generateMetadata({
 	const id = params.productId;
 
 	// fetch data
-	const product = await getProductGraphql(id);
+	const product = await getProductById(id);
 
 	if (!product) throw notFound();
 
@@ -40,7 +40,7 @@ export default async function ProductPage({
 }: {
 	params: { productId: string };
 }) {
-	const product = await getProductGraphql(productId);
+	const product = await getProductById(productId);
 
 	if (!product) throw notFound();
 
