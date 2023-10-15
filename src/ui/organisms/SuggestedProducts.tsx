@@ -35,8 +35,11 @@ export const SuggestedProductsList = async ({
 				data-testid="related-products"
 			>
 				{suggestedProducts.map((product) => (
-					<Link href={`/product/${product.id}`} key={product.id}>
-						<li className="flex h-96 w-64 flex-col items-center justify-center">
+					<li
+						key={product.id}
+						className="flex h-96 w-64 flex-col items-center justify-center"
+					>
+						<Link href={`/product/${product.id}`}>
 							<NextImage
 								className="h-64 w-64"
 								height={400}
@@ -50,8 +53,8 @@ export const SuggestedProductsList = async ({
 							<p className="mb-5 text-xl">
 								{formatPrice(product.price)}
 							</p>
-						</li>
-					</Link>
+						</Link>
+					</li>
 				))}
 			</ul>
 		</section>

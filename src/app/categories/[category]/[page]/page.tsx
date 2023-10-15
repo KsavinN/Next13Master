@@ -1,3 +1,4 @@
+import { type Metadata } from "next";
 import { getProductByCategorySlug } from "@/api/categories";
 import { ProductsList } from "@/ui/organisms/ProductList";
 
@@ -8,6 +9,18 @@ type Props = {
 	};
 };
 
+const CapitalizeFirstLetter = (str: string) => {
+	return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
+export async function generateMetadata({
+	params,
+}: Props): Promise<Metadata> {
+	return {
+		title: CapitalizeFirstLetter(params.category),
+	};
+}
+
 export default async function CategoryPage({
 	params: { page, category },
 }: Props) {
@@ -16,5 +29,10 @@ export default async function CategoryPage({
 		page: pageNumber,
 		categorySlug: category,
 	});
-	return <ProductsList products={productData} />;
+	return (
+		<section>
+			<h1>{CapitalizeFirstLetter(category)}</h1>
+			<ProductsList products={productData} />
+		</section>
+	);
 }

@@ -16,7 +16,7 @@ export async function generateMetadata({
 }: Props): Promise<Metadata> {
 	const collectionData = await getCollectionBySlug(collection);
 	return {
-		title: collection,
+		title: collectionData?.name ?? "",
 		openGraph: {
 			title: collection,
 			description: collectionData?.description ?? "",
@@ -27,15 +27,13 @@ export async function generateMetadata({
 export default async function SingleCollectionPage({
 	params: { collection },
 }: Props) {
+	const collectionData = await getCollectionBySlug(collection);
 	const productsInCollection =
 		await getProductByCollectionSlug(collection);
 	return (
 		<section className="mx-auto min-h-screen max-w-7xl">
-			<h1
-				className="pb-20 text-4xl font-extrabold first-letter:uppercase"
-				role="heading"
-			>
-				{collection}
+			<h1 className="pb-20 text-4xl font-extrabold first-letter:uppercase">
+				{collectionData?.name}
 			</h1>
 			<ProductsList products={productsInCollection} />
 		</section>

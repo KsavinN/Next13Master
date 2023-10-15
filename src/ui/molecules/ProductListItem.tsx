@@ -14,14 +14,14 @@ export const ProductListItem = ({
 	const coverImg = { src: images[0]?.url ?? "", alt: name };
 	return (
 		<li className="h-full list-none p-4">
-			<article className="hover:scale-110">
-				<Link href={`/product/${id}`} prefetch>
+			<Link href={`/product/${id}`} prefetch>
+				<article className="hover:scale-110">
 					<ProductCoverImage {...coverImg} />
 					<ProductListItemDescription
 						product={{ name, category, price }}
 					/>
-				</Link>
-			</article>
+				</article>
+			</Link>
 		</li>
 	);
 };
