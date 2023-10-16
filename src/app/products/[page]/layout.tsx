@@ -19,7 +19,7 @@ export default async function ProductPageLayout({
 		productsCount / OFFSET_PRODUCTS_DEFAULT,
 	);
 	return (
-		<section className="min-h-screen justify-between p-24">
+		<section className="min-h-screen w-full justify-between p-24">
 			<ProductsPagination
 				className="mb-5"
 				activePage={page}

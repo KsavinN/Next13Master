@@ -10,7 +10,7 @@ export default async function Home() {
 		<section className="flex min-h-screen flex-col gap-5 p-8">
 			<section>
 				<h1 className="mb-5 font-bold">Trending Collections</h1>
-				<ul className="flex justify-between gap-5">
+				<ul className="flex flex-wrap justify-between gap-5 sm:flex-nowrap">
 					{collections.map((collection) => (
 						<li
 							key={collection.id}
