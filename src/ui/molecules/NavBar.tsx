@@ -38,7 +38,7 @@ export const NavBar = async () => {
 					</li>
 				))}
 				{categories.map((category) => (
-					<li key={category.name}>
+					<li key={category.name} data-testid="category-link-id">
 						<ActiveLink
 							className={className}
 							activeClassName={activeClassName}
