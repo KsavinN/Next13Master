@@ -1,16 +1,16 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import type { Metadata } from "next";
 import NextImage from "next/image";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { revalidateTag } from "next/cache";
+// import { revalidateTag } from "next/cache";
+import { cookies } from "next/headers";
 import { getProductById } from "@/api/products";
 import { SuggestedProductsList } from "@/ui/organisms/SuggestedProducts";
 import { formatPrice } from "@/utils/formatPrice";
 import { ProductItemVariantsList } from "@/ui/molecules/ProductItemVariantsList";
 import { ProductReview } from "@/ui/organisms/ProductReview";
 import { FormSubmitButton } from "@/ui/atoms/FormSubmitButton";
-import { addOrUpdateProductToCart } from "@/api/cart";
+import { addProductToCart, getOrCreateCart } from "@/api/cart";
 
 type Props = {
 	params: {
@@ -49,19 +49,19 @@ export default async function ProductPage({
 
 	if (!product) throw notFound();
 
-	async function addToCartAction(formData: FormData) {
-		"use server";
-		const id = await addOrUpdateProductToCart(
-			String(formData.get("productId")),
-			Number(formData.get("productPrice")),
-		);
-
-		revalidateTag("cart");
-
-		return id;
-	}
-
 	const categorySlug = product.categories[0]?.slug;
+
+	const addProductToCartAction = async () => {
+		"use server";
+		const cart = await getOrCreateCart();
+		if (cart) {
+			cookies().set("cartId", cart.id, {
+				httpOnly: true,
+				sameSite: "lax",
+			});
+			await addProductToCart(cart.id, product.id, product.price);
+		}
+	};
 
 	return (
 		<>
@@ -87,7 +87,7 @@ export default async function ProductPage({
 					</section>
 					<ProductItemVariantsList productId={productId} />
 					<section className="mt-10 flex items-center">
-						<form action={addToCartAction}>
+						<form action={addProductToCartAction}>
 							<input
 								type="text"
 								name="productId"

@@ -3,7 +3,7 @@ import { ShoppingBasket } from "lucide-react";
 import { ActiveLink } from "@/ui/atoms/ActiveLink";
 import { getCategoryListGraphql } from "@/api/categories";
 import { SearchInput } from "@/ui/atoms/SearchProduct";
-import { getCartByIdFromCookie } from "@/api/cart";
+// import { getCartByIdFromCookie } from "@/api/cart";
 
 const className = "text-gray-50 hover:underline underline-offset-2";
 const activeClassName = "text-gray-150 underline underline-offset-2";
@@ -19,8 +19,8 @@ const navbarList: {
 
 export const NavBar = async () => {
 	const categories = await getCategoryListGraphql();
-	const cart = await getCartByIdFromCookie();
-	const quantity = cart?.orderItems.length ?? 0;
+	// const cart = await getCartByIdFromCookie();
+	// const quantity = cart?.orderItems.length ?? 0;
 
 	return (
 		<nav role="navigation">
@@ -61,7 +61,7 @@ export const NavBar = async () => {
 					>
 						<div className="flex justify-between gap-5">
 							<ShoppingBasket />
-							<p>Cart {!!quantity && quantity}</p>
+							{/* <p>Cart {!!quantity && quantity}</p> */}
 						</div>
 					</ActiveLink>
 				</li>

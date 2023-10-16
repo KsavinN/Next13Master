@@ -1,12 +1,12 @@
-import { getCartByIdFromCookie } from "@/api/cart";
+import { getCart } from "@/api/cart";
 import { ContinueShoppingButton } from "@/ui/atoms/ContinueShoppingButton";
-import { CartProductList } from "@/ui/molecules/CartProductList";
 import { CartEmpty } from "@/ui/molecules/CartEmpty";
+import { CartProductList } from "@/ui/molecules/CartProductList";
 
 export default async function CartPage() {
-	const cart = await getCartByIdFromCookie();
-
-	if (!cart || cart.orderItems.length === 0) {
+	"use server";
+	const cart = await getCart();
+	if (!cart || cart.orderItems.length <= 0) {
 		return <CartEmpty />;
 	}
 

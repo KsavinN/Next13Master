@@ -1,6 +1,0 @@
-mutation CartCreate($total: Int!) {
-	createOrder(data: { total: $total }) {
-		id
-		total
-	}
-}

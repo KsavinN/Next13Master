@@ -2,9 +2,9 @@
 import { revalidateTag } from "next/cache";
 import { executeGraphql } from "@/api/graphqlApi";
 import {
-	CartDeleteProductDocument,
 	CartSetProductQuantityDocument,
 	type CartFragment,
+	CartRemoveItemDocument,
 } from "@/gql/graphql";
 
 export const changeItemQuantity = async (
@@ -21,9 +21,7 @@ export const changeItemQuantity = async (
 		},
 		{
 			cache: "no-store",
-			headers: {
-				Authorization: `Bearer ${process.env.HYGRAPH_MUTATION_TOKEN}`,
-			},
+			mutation: true,
 		},
 	);
 
@@ -31,16 +29,15 @@ export const changeItemQuantity = async (
 	return changeItem;
 };
 
-export const deleteItem = (itemId: string) => {
+export const deleteItem = (orderId: string) => {
 	const deleteItem = executeGraphql(
-		CartDeleteProductDocument,
+		CartRemoveItemDocument,
 		{
-			itemId,
+			orderId,
 		},
 		{
-			headers: {
-				Authorization: `Bearer ${process.env.HYGRAPH_MUTATION_TOKEN}`,
-			},
+			mutation: true,
+			throttle: 3000,
 		},
 	);
 

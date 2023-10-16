@@ -1,112 +1,76 @@
 import { cookies } from "next/headers";
 import { executeGraphql } from "@/api/graphqlApi";
 import {
-	CartCreateAndAddProductDocument,
+	CartCreateDocument,
 	CartGetByIdDocument,
-	CartUpsertProductDocument,
+	CartUpsertItemDocument,
 } from "@/gql/graphql";
 
-export const createCartAndAddFirstProduct = async (
-	productId: string,
-	total: number,
-) => {
-	const { createOrder: newCart } = await executeGraphql(
-		CartCreateAndAddProductDocument,
-		{ productId, total },
-		{
-			cache: "no-store",
-			headers: {
-				Authorization: `Bearer ${process.env.HYGRAPH_MUTATION_TOKEN}`,
-			},
-		},
-	);
-
-	if (!newCart) {
-		throw new Error("Failed to create cart");
+export async function getCart() {
+	const cartId = cookies().get("cartId")?.value;
+	if (!cartId) {
+		return null;
 	}
 
-	cookies().set("cartId", newCart.id, {
-		httpOnly: true,
-		sameSite: "lax",
+	const queryResponse = await executeGraphql(CartGetByIdDocument, {
+		id: cartId,
 	});
+	return queryResponse.order;
+}
 
-	return newCart.id;
-};
-
-export const getCartByIdFromCookie = async () => {
+export async function getOrCreateCart() {
 	const cartId = cookies().get("cartId")?.value;
 	if (cartId) {
-		const { order: cart } = await executeGraphql(
-			CartGetByIdDocument,
-			{ id: cartId },
-			{
-				cache: "no-store",
-				next: { tags: ["cart"] },
-				headers: {
-					Authorization: `Bearer ${process.env.HYGRAPH_QUERY_TOKEN}`,
-				},
-			},
-		);
-
-		if (cart) {
-			return cart;
-		}
-	}
-};
-
-export const addOrUpdateProductToCart = async (
-	productId: string,
-	total: number,
-) => {
-	const cart = await getCartByIdFromCookie();
-	if (!cart) {
-		const newCartId = await createCartAndAddFirstProduct(
-			productId,
-			total,
-		);
-		return newCartId;
-	}
-
-	const orderItem = cart?.orderItems?.find(
-		(item) => item?.product?.id === productId,
-	);
-
-	const cartId = await executeGraphql(
-		CartUpsertProductDocument,
-		{
-			productId,
-			orderId: orderItem ? orderItem.id : cart.id,
-			quantity: orderItem ? orderItem.quantity + 1 : 1,
-			total: orderItem ? total * (orderItem.quantity + 1) : total,
-		},
-		{
-			cache: "no-store",
-			headers: {
-				Authorization: `Bearer ${process.env.HYGRAPH_MUTATION_TOKEN}`,
-			},
-		},
-	);
-
-	return cartId.upsertOrderItem?.id;
-};
-
-export const getCartFromCookies = async () => {
-	const cartId = cookies().get("cartId")?.value;
-	if (cartId) {
-		const cart = await executeGraphql(
+		const queryResponse = await executeGraphql(
 			CartGetByIdDocument,
 			{
 				id: cartId,
 			},
-			{
-				cache: "no-store",
-				next: {
-					tags: ["cart"],
-				},
-			},
+			{ throttle: 8000 },
 		);
-		if (cart.order) {
-			return cart.order;
-		}
+		return queryResponse.order;
 	}
-};
+
+	const { createOrder } = await executeGraphql(
+		CartCreateDocument,
+		{},
+		{ mutation: true },
+	);
+
+	if (!createOrder) {
+		throw Error("Failed to create cart");
+	}
+
+	cookies().set("cartId", createOrder.id, {
+		httpOnly: true,
+		sameSite: "lax",
+	});
+	return createOrder;
+}
+
+export async function addProductToCart(
+	orderId: string,
+	productId: string,
+	price: number,
+) {
+	const cart = await getCart();
+	if (!cart) {
+		throw Error("Failed to get cart");
+	}
+
+	const orderItem = cart?.orderItems.find(
+		(item) => item.product?.id === productId,
+	);
+	const quantity = orderItem ? orderItem.quantity + 1 : 1;
+
+	await executeGraphql(
+		CartUpsertItemDocument,
+		{
+			orderId: orderItem?.id || orderId,
+			productId,
+			price: orderItem ? quantity * price : price,
+			quantity,
+		},
+		{ mutation: true, throttle: 8000 },
+	);
+}
