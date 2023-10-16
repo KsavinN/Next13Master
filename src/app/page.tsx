@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getCollectionList } from "@/api/collections";
-import { getProductsListGraphql as getProductsList } from "@/api/products";
+import { getProductsList as getProductsList } from "@/api/products";
 import { ProductsList } from "@/ui/organisms/ProductList";
 
 export default async function Home() {

@@ -53,7 +53,7 @@ export const CartProductList = ({ cart }: CartProductListProps) => {
 					),
 			)}
 			<li className="flex items-center justify-between bg-neutral-200 p-5">
-				<div className="text-2xl">
+				<div className="text-2xl text-black	">
 					Total:{" "}
 					<span className="font-semibold">
 						{formatPrice(total / 100)}

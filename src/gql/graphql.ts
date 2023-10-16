@@ -10826,6 +10826,7 @@ export type ProductsCountsByCategorySlugQuery = { productsConnection: { aggregat
 export type ProductGetListQueryVariables = Exact<{
   limit: Scalars['Int']['input'];
   offset: Scalars['Int']['input'];
+  orderBy?: InputMaybe<ProductOrderByInput>;
 }>;
 
 
@@ -11132,8 +11133,8 @@ export const ProductsCountsByCategorySlugDocument = new TypedDocumentString(`
 }
     `) as unknown as TypedDocumentString<ProductsCountsByCategorySlugQuery, ProductsCountsByCategorySlugQueryVariables>;
 export const ProductGetListDocument = new TypedDocumentString(`
-    query ProductGetList($limit: Int!, $offset: Int!) {
-  productsConnection(first: $limit, skip: $offset) {
+    query ProductGetList($limit: Int!, $offset: Int!, $orderBy: ProductOrderByInput) {
+  productsConnection(first: $limit, skip: $offset, orderBy: $orderBy) {
     products: edges {
       node {
         ...ProductItem

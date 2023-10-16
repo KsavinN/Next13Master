@@ -1,4 +1,5 @@
 import { type TypedDocumentString } from "@/gql/graphql";
+import { sleep } from "@/utils/sleep";
 
 type GraphQLResponse<TData> =
 	| {
@@ -13,10 +14,6 @@ type ExecuteGraphqlConfig = {
 	cache?: RequestCache;
 	next?: NextFetchRequestConfig;
 	headers?: HeadersInit;
-};
-
-const sleep = async (ms: number) => {
-	return setTimeout(() => {}, ms);
 };
 
 export const executeGraphql = async <TResult, TVariables>(

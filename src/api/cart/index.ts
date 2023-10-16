@@ -26,7 +26,7 @@ export async function getOrCreateCart() {
 			{
 				id: cartId,
 			},
-			{ throttle: 8000 },
+			{ throttle: 9000 },
 		);
 		return queryResponse.order;
 	}
@@ -34,7 +34,7 @@ export async function getOrCreateCart() {
 	const { createOrder } = await executeGraphql(
 		CartCreateDocument,
 		{},
-		{ mutation: true },
+		{ mutation: true, throttle: 5000 },
 	);
 
 	if (!createOrder) {
@@ -71,6 +71,6 @@ export async function addProductToCart(
 			price: orderItem ? quantity * price : price,
 			quantity,
 		},
-		{ mutation: true, throttle: 8000 },
+		{ mutation: true, throttle: 5000 },
 	);
 }

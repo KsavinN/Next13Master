@@ -11,6 +11,7 @@ import { ProductItemVariantsList } from "@/ui/molecules/ProductItemVariantsList"
 import { ProductReview } from "@/ui/organisms/ProductReview";
 import { FormSubmitButton } from "@/ui/atoms/FormSubmitButton";
 import { addProductToCart, getOrCreateCart } from "@/api/cart";
+import { sleep } from "@/utils/sleep";
 
 type Props = {
 	params: {
@@ -54,6 +55,7 @@ export default async function ProductPage({
 	const addProductToCartAction = async () => {
 		"use server";
 		const cart = await getOrCreateCart();
+		await sleep(9000);
 		if (cart) {
 			cookies().set("cartId", cart.id, {
 				httpOnly: true,

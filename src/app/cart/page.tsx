@@ -12,8 +12,8 @@ export default async function CartPage() {
 
 	return (
 		<section className="flex w-full flex-col">
-			<div className="flex h-24 w-full flex-row items-center justify-between border-t-4 border-amber-600 bg-neutral-100 px-6 py-1 sm:px-36">
-				<h1 className="text-2xl font-bold">Cart Shop</h1>
+			<div className="flex h-24 w-full flex-row items-center justify-between border-t-4 border-amber-600 bg-neutral-200 px-6 py-1 sm:px-36">
+				<h1 className="text-2xl font-black text-black">Cart Shop</h1>
 				<ContinueShoppingButton />
 			</div>
 			<ul className="mx-auto flex w-full max-w-3xl flex-col gap-5 py-6">

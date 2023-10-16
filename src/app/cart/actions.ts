@@ -37,7 +37,6 @@ export const deleteItem = (orderId: string) => {
 		},
 		{
 			mutation: true,
-			throttle: 3000,
 		},
 	);
 

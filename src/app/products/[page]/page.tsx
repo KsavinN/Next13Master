@@ -1,14 +1,18 @@
 import {
 	OFFSET_PRODUCTS_DEFAULT,
 	getProductsCountsGraphql,
-	getProductsListGraphql,
+	getProductsList,
 } from "@/api/products";
+import { type ProductOrderByInput } from "@/gql/graphql";
 import { ProductsList } from "@/ui/organisms/ProductList";
 import { range } from "@/utils/range";
 
 type Props = {
 	params: {
 		page: string;
+	};
+	searchParams: {
+		sort: ProductOrderByInput;
 	};
 };
 
@@ -24,10 +28,13 @@ export const generateStaticParams = async () => {
 
 export default async function ProductsWithPaginationPage({
 	params: { page },
+	searchParams,
 }: Props) {
 	const pageNumber = Number(page);
-	const productData = await getProductsListGraphql({
+	const { sort } = searchParams;
+	const productData = await getProductsList({
 		page: pageNumber,
+		sort,
 	});
 	return <ProductsList products={productData} />;
 }

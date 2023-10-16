@@ -52,21 +52,19 @@ export const NavBar = async () => {
 				<li className="ml-auto">
 					<SearchInput />
 				</li>
-				{cart && (
-					<li>
-						<ActiveLink
-							className={className}
-							activeClassName={activeClassName}
-							href="/cart"
-							exact
-						>
-							<div className="flex justify-between gap-5">
-								<ShoppingBasket />
-								<p>Cart {!!quantity && quantity}</p>
-							</div>
-						</ActiveLink>
-					</li>
-				)}
+				<li>
+					<ActiveLink
+						className={className}
+						activeClassName={activeClassName}
+						href="/cart"
+						exact
+					>
+						<div className="flex justify-between gap-5">
+							<ShoppingBasket />
+							<p>Cart {!!quantity && quantity}</p>
+						</div>
+					</ActiveLink>
+				</li>
 			</ul>
 		</nav>
 	);

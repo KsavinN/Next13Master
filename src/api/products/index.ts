@@ -7,6 +7,7 @@ import {
 	ProductsCountsByCategorySlugDocument,
 	ProductGetVariantsListDocument,
 	ProductsGetListSearchDocument,
+	type ProductOrderByInput,
 } from "@/gql/graphql";
 
 export const OFFSET_PRODUCTS_DEFAULT = 6;
@@ -14,19 +15,25 @@ export const OFFSET_PRODUCTS_DEFAULT = 6;
 type getProductsListGraphqlParams = {
 	limit?: number;
 	page?: number;
+	sort?: ProductOrderByInput;
 };
 
-export const getProductsListGraphql = async (
+export const getProductsList = async (
 	params?: getProductsListGraphqlParams,
 ) => {
 	const limit = params?.limit
 		? params.limit
 		: OFFSET_PRODUCTS_DEFAULT;
 	const offset = params?.page ? (params.page - 1) * limit : 0;
-	const queryResponse = await executeGraphql(ProductGetListDocument, {
-		limit,
-		offset,
-	});
+	const queryResponse = await executeGraphql(
+		ProductGetListDocument,
+		{
+			limit,
+			offset,
+			orderBy: params?.sort,
+		},
+		{ throttle: 5000 },
+	);
 
 	if (!queryResponse) {
 		throw TypeError(`Product list not found`);

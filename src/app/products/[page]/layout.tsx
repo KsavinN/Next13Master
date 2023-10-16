@@ -2,6 +2,7 @@ import {
 	OFFSET_PRODUCTS_DEFAULT,
 	getProductsCountsGraphql,
 } from "@/api/products";
+import { SortPriceSelect } from "@/ui/atoms/SortSelect";
 import { ProductsPagination } from "@/ui/organisms/ProductsPagination";
 
 export default async function ProductPageLayout({
@@ -25,6 +26,7 @@ export default async function ProductPageLayout({
 				pages={numberOfPages}
 				paginationType="product"
 			/>
+			<SortPriceSelect />
 			<section>{children}</section>
 		</section>
 	);
