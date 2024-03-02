@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 "use client";
-import { experimental_useOptimistic as useOptimistic } from "react";
+import { useOptimistic } from "react";
 import { Plus, Minus } from "lucide-react";
 import { changeItemQuantity } from "@/app/cart/actions";
 

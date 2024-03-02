@@ -34,7 +34,7 @@ export type Aggregate = {
 };
 
 /** Asset system model */
-export type Asset = Node & {
+export type Asset = Entity & Node & {
   /** The time the document was created */
   createdAt: Scalars['DateTime']['output'];
   /** User that created this document */
@@ -738,7 +738,7 @@ export type BatchPayload = {
 };
 
 /** Category of products, e.g. Menswear. */
-export type Category = Node & {
+export type Category = Entity & Node & {
   /** The time the document was created */
   createdAt: Scalars['DateTime']['output'];
   /** User that created this document */
@@ -1325,7 +1325,7 @@ export type CategoryWhereUniqueInput = {
 };
 
 /** Collection of products, e.g. Winter Sale. */
-export type Collection = Node & {
+export type Collection = Entity & Node & {
   /** The time the document was created */
   createdAt: Scalars['DateTime']['output'];
   /** User that created this document */
@@ -1947,7 +1947,7 @@ export type ConnectPositionInput = {
   start?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
-export type Currency = Node & {
+export type Currency = Entity & Node & {
   code: Scalars['String']['output'];
   /** The time the document was created */
   createdAt: Scalars['DateTime']['output'];
@@ -2481,6 +2481,46 @@ export type DocumentVersion = {
   id: Scalars['ID']['output'];
   revision: Scalars['Int']['output'];
   stage: Stage;
+};
+
+/** An object with an ID */
+export type Entity = {
+  /** The id of the object. */
+  id: Scalars['ID']['output'];
+  /** The Stage of an object */
+  stage: Stage;
+};
+
+/** This enumeration holds all typenames that implement the Entity interface. Components and models implement the Entity interface. */
+export type EntityTypeName =
+  /** Asset system model */
+  | 'Asset'
+  /** Category of products, e.g. Menswear. */
+  | 'Category'
+  /** Collection of products, e.g. Winter Sale. */
+  | 'Collection'
+  | 'Currency'
+  | 'Order'
+  | 'OrderItem'
+  | 'Product'
+  | 'ProductColorVariant'
+  | 'ProductSizeColorVariant'
+  | 'ProductSizeVariant'
+  | 'Review'
+  /** Scheduled Operation system model */
+  | 'ScheduledOperation'
+  /** Scheduled Release system model */
+  | 'ScheduledRelease'
+  /** User system model */
+  | 'User';
+
+/** Allows to specify input to query models and components directly */
+export type EntityWhereInput = {
+  /** The ID of an object */
+  id: Scalars['ID']['input'];
+  stage: Stage;
+  /** The Type name of an object */
+  typename: EntityTypeName;
 };
 
 export type ImageFit =
@@ -4497,7 +4537,7 @@ export type Node = {
   stage: Stage;
 };
 
-export type Order = Node & {
+export type Order = Entity & Node & {
   /** The time the document was created */
   createdAt: Scalars['DateTime']['output'];
   /** User that created this document */
@@ -4629,7 +4669,7 @@ export type OrderEdge = {
   node: Order;
 };
 
-export type OrderItem = Node & {
+export type OrderItem = Entity & Node & {
   /** The time the document was created */
   createdAt: Scalars['DateTime']['output'];
   /** User that created this document */
@@ -5515,7 +5555,7 @@ export type PageInfo = {
   startCursor?: Maybe<Scalars['String']['output']>;
 };
 
-export type Product = Node & {
+export type Product = Entity & Node & {
   categories: Array<Category>;
   collections: Array<Collection>;
   /** The time the document was created */
@@ -5699,7 +5739,7 @@ export type ProductColor =
   | 'PINK'
   | 'PURPLE';
 
-export type ProductColorVariant = Node & {
+export type ProductColorVariant = Entity & Node & {
   color: ProductColor;
   /** The time the document was created */
   createdAt: Scalars['DateTime']['output'];
@@ -6435,7 +6475,7 @@ export type ProductSize =
   | 'XL'
   | 'XS';
 
-export type ProductSizeColorVariant = Node & {
+export type ProductSizeColorVariant = Entity & Node & {
   color: ProductColor;
   /** The time the document was created */
   createdAt: Scalars['DateTime']['output'];
@@ -6983,7 +7023,7 @@ export type ProductSizeColorVariantWhereUniqueInput = {
   id?: InputMaybe<Scalars['ID']['input']>;
 };
 
-export type ProductSizeVariant = Node & {
+export type ProductSizeVariant = Entity & Node & {
   /** The time the document was created */
   createdAt: Scalars['DateTime']['output'];
   /** User that created this document */
@@ -7980,6 +8020,8 @@ export type Query = {
   /** Retrieve document version */
   currencyVersion?: Maybe<DocumentVersion>;
   /** Fetches an object given its ID */
+  entities?: Maybe<Array<Entity>>;
+  /** Fetches an object given its ID */
   node?: Maybe<Node>;
   /** Retrieve a single order */
   order?: Maybe<Order>;
@@ -8207,6 +8249,11 @@ export type QueryCurrencyArgs = {
 
 export type QueryCurrencyVersionArgs = {
   where: VersionWhereInput;
+};
+
+
+export type QueryEntitiesArgs = {
+  where: Array<EntityWhereInput>;
 };
 
 
@@ -8597,7 +8644,7 @@ export type RgbaInput = {
   r: Scalars['RGBAHue']['input'];
 };
 
-export type Review = Node & {
+export type Review = Entity & Node & {
   content: Scalars['String']['output'];
   /** The time the document was created */
   createdAt: Scalars['DateTime']['output'];
@@ -9215,7 +9262,7 @@ export type RichText = {
 };
 
 /** Scheduled Operation system model */
-export type ScheduledOperation = Node & {
+export type ScheduledOperation = Entity & Node & {
   affectedDocuments: Array<ScheduledOperationAffectedDocument>;
   /** The time the document was created */
   createdAt: Scalars['DateTime']['output'];
@@ -9645,7 +9692,7 @@ export type ScheduledOperationWhereUniqueInput = {
 };
 
 /** Scheduled Release system model */
-export type ScheduledRelease = Node & {
+export type ScheduledRelease = Entity & Node & {
   /** The time the document was created */
   createdAt: Scalars['DateTime']['output'];
   /** User that created this document */
@@ -10239,7 +10286,7 @@ export type UnpublishLocaleInput = {
 };
 
 /** User system model */
-export type User = Node & {
+export type User = Entity & Node & {
   /** The time the document was created */
   createdAt: Scalars['DateTime']['output'];
   /** Get the document in other stages */

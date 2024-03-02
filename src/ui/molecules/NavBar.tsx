@@ -24,7 +24,7 @@ export const NavBar = async () => {
 
 	return (
 		<nav role="navigation">
-			<ul className="flex flex-wrap items-center justify-center gap-8 p-5">
+			<ul className="flex flex-wrap items-center justify-center  gap-8 p-5">
 				{navbarList.map((item) => (
 					<li key={item.title}>
 						<ActiveLink
