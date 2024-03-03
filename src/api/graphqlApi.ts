@@ -21,7 +21,7 @@ export const executeGraphql = async <TResult, TVariables>(
 	variables: TVariables,
 	config?: ExecuteGraphqlConfig,
 ): Promise<TResult> => {
-	const throttle = pThrottle({ limit: 8, interval: 10000 });
+	const throttle = pThrottle({ limit: 8, interval: 8000 });
 	const mutationHeaders = config?.mutation
 		? {
 				Authorization: `Bearer ${process.env.HYGRAPH_MUTATION_TOKEN}`,
