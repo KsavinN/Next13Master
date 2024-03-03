@@ -38,7 +38,6 @@ export const getProductsList = async (
 	if (!queryResponse) {
 		throw TypeError(`Product list not found`);
 	}
-
 	return queryResponse.productsConnection.products.map(
 		(node) => node.node,
 	);

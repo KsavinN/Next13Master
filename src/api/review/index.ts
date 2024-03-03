@@ -1,14 +1,15 @@
 import {
 	ReviewCreateDocument,
-	ReviewGetByProductIdDocument,
+	ReviewsGetByProductIdDocument,
 	ReviewPublishDocument,
 	type ReviewItemFragment,
+	ProductUpdateAverageRatingDocument,
 } from "@/gql/graphql";
 import { executeGraphql } from "@/api/graphqlApi";
 
 export const getProductReviewById = async (productId: string) => {
 	const queryResponse = await executeGraphql(
-		ReviewGetByProductIdDocument,
+		ReviewsGetByProductIdDocument,
 		{ id: productId },
 	);
 
@@ -48,4 +49,28 @@ export const publishReview = async (reviewId: string) => {
 	if (!queryResponse) throw TypeError(`Review not created`);
 
 	return queryResponse;
+};
+
+export const updateAverageRatingOfProduct = async (
+	productId: string,
+) => {
+	const reviews = await getProductReviewById(productId);
+	if (!reviews) return;
+	const count = reviews.length;
+	const totalRating = reviews.reduce((aggregator, review) => {
+		return aggregator + review.rating;
+	}, 0);
+
+	const averageRating =
+		count === 0 ? 0.0 : Math.round((totalRating / count) * 100) / 100;
+	if (isNaN(averageRating))
+		throw TypeError(`Average rating is not a number`);
+
+	const status = await executeGraphql(
+		ProductUpdateAverageRatingDocument,
+		{ productId, averageRating },
+		{ mutation: true },
+	);
+	if (!status) throw TypeError(`Average rating not updated`);
+	return status;
 };

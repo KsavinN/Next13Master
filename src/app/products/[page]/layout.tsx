@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import {
 	OFFSET_PRODUCTS_DEFAULT,
 	getProductsCountsGraphql,
@@ -26,7 +27,9 @@ export default async function ProductPageLayout({
 				pages={numberOfPages}
 				paginationType="product"
 			/>
-			<SortPriceSelect />
+			<Suspense>
+				<SortPriceSelect />
+			</Suspense>
 			<section>{children}</section>
 		</section>
 	);

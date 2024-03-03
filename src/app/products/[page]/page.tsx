@@ -36,5 +36,6 @@ export default async function ProductsWithPaginationPage({
 		page: pageNumber,
 		sort,
 	});
+
 	return <ProductsList products={productData} />;
 }

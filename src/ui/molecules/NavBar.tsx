@@ -23,49 +23,55 @@ export const NavBar = async () => {
 	const quantity = cart?.orderItems.length ?? 0;
 
 	return (
-		<nav role="navigation">
-			<ul className="flex flex-wrap items-center justify-center  gap-8 p-5">
-				{navbarList.map((item) => (
-					<li key={item.title}>
+		<>
+			<nav role="navigation">
+				<ul className="flex flex-wrap items-center justify-center  gap-8 p-5">
+					{navbarList.map((item) => (
+						<li key={item.title}>
+							<ActiveLink
+								className={className}
+								activeClassName={activeClassName}
+								href={item.href}
+								exact={item.exact}
+							>
+								{item.title}
+							</ActiveLink>
+						</li>
+					))}
+					{categories.map((category) => (
+						<li key={category.name} data-testid="category-link-id">
+							<ActiveLink
+								className={className}
+								activeClassName={activeClassName}
+								href={`/categories/${category.slug}/`}
+								exact={false}
+							>
+								{category.name}
+							</ActiveLink>
+						</li>
+					))}
+				</ul>
+			</nav>
+			<section className="ml-auto mr-auto">
+				<ul className="flex items-center justify-center gap-5">
+					<li>
+						<SearchInput />
+					</li>
+					<li>
 						<ActiveLink
 							className={className}
 							activeClassName={activeClassName}
-							href={item.href}
-							exact={item.exact}
+							href="/cart"
+							exact
 						>
-							{item.title}
+							<div className="flex justify-between gap-2">
+								<ShoppingBasket />
+								<p>Cart {!!quantity && quantity}</p>
+							</div>
 						</ActiveLink>
 					</li>
-				))}
-				{categories.map((category) => (
-					<li key={category.name} data-testid="category-link-id">
-						<ActiveLink
-							className={className}
-							activeClassName={activeClassName}
-							href={`/categories/${category.slug}/`}
-							exact={false}
-						>
-							{category.name}
-						</ActiveLink>
-					</li>
-				))}
-				<li className="flex sm:ml-auto">
-					<SearchInput />
-				</li>
-				<li>
-					<ActiveLink
-						className={className}
-						activeClassName={activeClassName}
-						href="/cart"
-						exact
-					>
-						<div className="flex justify-between gap-5">
-							<ShoppingBasket />
-							<p>Cart {!!quantity && quantity}</p>
-						</div>
-					</ActiveLink>
-				</li>
-			</ul>
-		</nav>
+				</ul>
+			</section>
+		</>
 	);
 };

@@ -3,6 +3,7 @@ fragment ProductItem on Product {
 	name
 	price
 	description
+	averageRating
 	categories(first: 1) {
 		name
 		slug

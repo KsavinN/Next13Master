@@ -4,6 +4,7 @@ import {
 	type FormEvent,
 	useEffect,
 	useState,
+	Suspense,
 } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useDebounce } from "use-debounce";
@@ -38,31 +39,33 @@ export const SearchInput = () => {
 	}, [value, query, router]);
 
 	return (
-		<form
-			className="flex justify-between gap-3"
-			onSubmit={handleSearchOnSubmit}
-			onKeyDown={(event) => {
-				event.key === "Enter" &&
-					router.push(`/search?query=${query?.toString()}`);
-			}}
-		>
-			<input
-				name="search"
-				className="w-[200px] rounded-md border p-2 text-black "
-				type="search"
-				role="searchbox"
-				placeholder="Search..."
-				autoComplete="off"
-				value={query}
-				onChange={handleSearchOnChange}
-			/>
-			<button type="submit">
-				<Search
+		<Suspense>
+			<form
+				className="flex justify-between gap-3"
+				onSubmit={handleSearchOnSubmit}
+				onKeyDown={(event) => {
+					event.key === "Enter" &&
+						router.push(`/search?query=${query?.toString()}`);
+				}}
+			>
+				<input
 					name="search"
-					className="h-5 w-5 text-white"
-					aria-label="search-icon"
+					className="w-[250px] rounded-md border p-2 text-black "
+					type="search"
+					role="searchbox"
+					placeholder="Search..."
+					autoComplete="off"
+					value={query}
+					onChange={handleSearchOnChange}
 				/>
-			</button>
-		</form>
+				<button type="submit">
+					<Search
+						name="search"
+						className="h-5 w-5 text-white"
+						aria-label="search-icon"
+					/>
+				</button>
+			</form>
+		</Suspense>
 	);
 };

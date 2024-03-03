@@ -8,7 +8,7 @@ type ProductListItemProps = {
 };
 
 export const ProductListItem = ({
-	product: { categories, price, name, id, images },
+	product: { categories, price, name, id, images, averageRating },
 }: ProductListItemProps) => {
 	const category = categories[0]?.name ?? "";
 	const coverImg = { src: images[0]?.url ?? "", alt: name };
@@ -18,7 +18,7 @@ export const ProductListItem = ({
 				<article className="hover:scale-110">
 					<ProductCoverImage {...coverImg} />
 					<ProductListItemDescription
-						product={{ name, category, price }}
+						product={{ name, category, price, averageRating }}
 					/>
 				</article>
 			</Link>
